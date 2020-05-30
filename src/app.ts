@@ -5,7 +5,6 @@ import morgan from 'morgan';
 import passport_Middleware from './Middlewares/passport';
 import config from './Config'
 import api from './Routes'
-
 const app = express();
 
 // Puerto 

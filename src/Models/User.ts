@@ -1,23 +1,15 @@
 import { model, Schema, Document } from "mongoose";
 
 export interface IUser extends Document {
-    usuario: string;
     nombre: string;
     apellido: string;
+    rut:string;
+    telefono: number,
     email: string;
     password: string;
   };
 
 const UserSchema = new Schema({
-    usuario:{
-        type:String,
-        required: true,
-        lowercase: true,
-        trim: true,
-        unique: true,
-        minlength: 4,
-        maxlength: 30
-    },
     nombre:{
         type:String,
         required: true,
@@ -31,6 +23,19 @@ const UserSchema = new Schema({
         lowercase:true,
         minlength: 4,
         maxlength: 40
+    },
+    rut:{
+        type:String,
+        required: true,
+        trim: true,
+        unique: true,
+        maxlength: 30
+    },
+    telefono:{
+        type:Number,
+        required: true,
+        trim: true,
+        maxlength: 30
     },
     email:{
         type:String,

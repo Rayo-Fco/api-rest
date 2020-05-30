@@ -4,6 +4,7 @@ export interface IProduct extends Document {
     nombre: string;
     codigo: number;
     stock: number;
+    fotos: [];
   };
 
 const ProductSchema = new Schema({
@@ -32,7 +33,12 @@ const ProductSchema = new Schema({
     fecha_registro:{
         type:Date,
         default:Date.now
-    }
+    },
+    fotos:[{
+            type:String,
+            default:Date.now
+        }]
+
 
 })
 
