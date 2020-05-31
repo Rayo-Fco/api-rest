@@ -19,20 +19,22 @@ export class ProductController {
         let CargaFotoProducto = upload.array('foto',cantidadfoto);
         CargaFotoProducto(req, res, async function (err)
         {
-///////////////////////// Validar Parametros //////////////////////////   if (err.code == 'LIMIT_UNEXPECTED_FILE')   
+                // Validar Parametros //  
                 if(err != undefined && err.code == 'LIMIT_UNEXPECTED_FILE') return res.status(400).send({ error: `Solo se pueden subir ${cantidadfoto} Fotos` })
                 const {error} = Validar.Add_Product(req.body)
 
-                if(error){
+                if(error)
+                {
                     if(!err) LimpiarTmp(req.files)
                     return res.status(400).send({error: error.details})
                 }
                 let Validar_Productos = await Product.findOne({ codigo: req.body.codigo})
-                if (Validar_Productos){
+                if (Validar_Productos)
+                {
                     if(!err) LimpiarTmp(req.files)
                     return res.status(400).json({ error: `El Producto: ${req.body.nombre} Codigo: ${req.body.codigo} ya se encuentra registrado`});  
                 }
-///////////////////////// Error de las Fotos ///////////////////////////////////////
+                // Error de las Fotos //
                 if (err != undefined && err.code == 'LIMIT_FILE_SIZE') return res.status(400).send({ error: 'El Archivo no puede superar los 5 MB'})
                 fs.promises.mkdir(path.join(__dirname,'../Public/Products/')+req.body.codigo, { recursive: true })
                 const foto = []
@@ -43,7 +45,7 @@ export class ProductController {
                     fs.unlink(path.join(__dirname,'../tmp/')+p.filename, function (err) {}); 
                     foto.push(path.join(__dirname,'../Public/Products/'+req.body.codigo+'/')+p.filename)
                 }
-//////////////////////////////////Guardar el Producto///////////////////////////////////////////
+                //Guardar el Producto//
                 const producto = new Product({
                     nombre: req.body.nombre,
                     stock: req.body.stock,
@@ -59,7 +61,7 @@ export class ProductController {
         })
     }
 
-    public async UpdateStock(req:Request, res:Response){
+    public async updateStock(req:Request, res:Response){
 
         let validar_numero = req.params.id.match(/^[0-9]+$/)
         if(!validar_numero) return res.status(400).send({error: `El Producto:${req.params.id} es invalido`})
@@ -78,6 +80,22 @@ export class ProductController {
             return res.status(200).send({ mensaje: "Se a actualizado el stock"})
         
          }) 
+    }
+
+    public async deleteProduct(req:Request, res:Response){
+        let validar_numero = req.params.id.match(/^[0-9]+$/)
+        if(!validar_numero) return res.status(400).send({error: `El Producto:${req.params.id} es invalido`})
+
+        let cod_producto = parseInt(req.params.id)
+        let Validar_Codigo = await Product.findOne({ codigo: cod_producto})
+        if (!Validar_Codigo) return res.status(400).json({ error: `El Codigo: ${cod_producto} no se encuentra registrado`});
+        
+        await Product.findByIdAndRemove(Validar_Codigo._id,(error)=>{
+          if(error) return res.status(500).send( { error: `Error al eliminar el Producto: ${error}` })
+          fs.promises.rmdir(path.join(__dirname,'../Public/Products/')+cod_producto, { recursive: true }); 
+          return res.status(200).send({ mensaje: "Se a eliminado el Producto"})
+      
+       }) 
     }
     
 }

@@ -18,7 +18,8 @@ api.post('/login', CtrlUser.LoginIn)
 
 api.get('/productos', CtrlProduct.getProducts)
 api.post('/productos/agregar',  CtrlProduct.addProduct)
-api.put('/productos/:id',  CtrlProduct.UpdateStock)
+api.put('/productos/:id',  CtrlProduct.updateStock)
+api.delete('/productos/:id',  CtrlProduct.deleteProduct) 
 
 
 
