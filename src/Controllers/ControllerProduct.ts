@@ -4,7 +4,6 @@ import Validar from '../Middlewares/joi'
 import upload from '../Middlewares/multer'
 import fs from 'fs'
 import path from 'path'
-import mkdirp from 'mkdirp'
 
 export class ProductController {
     constructor() {}
@@ -74,7 +73,8 @@ export class ProductController {
         if (!Validar_Codigo) return res.status(400).json({ error: `El Codigo: ${cod_producto} no se encuentra registrado`});
          
         await Product.findOneAndUpdate({codigo:cod_producto}, {
-              stock: req.body.stock
+              stock: req.body.stock,
+              fecha_actualizacion: Date.now()
           },(error)=>{
             if(error) return res.status(500).send( { error: `Error al actualizar el stock: ${error}` })
             return res.status(200).send({ mensaje: "Se a actualizado el stock"})

@@ -26,6 +26,13 @@ const ProductSchema = new Schema({
         type:Number,
         required: true,
     },
+    categoria:{
+         type: Schema.Types.ObjectId,
+          ref: 'Category'
+    },
+    fotos:[{
+            type:String
+    }],
     fecha_actualizacion:{
         type:Date,
         default:Date.now
@@ -33,11 +40,7 @@ const ProductSchema = new Schema({
     fecha_registro:{
         type:Date,
         default:Date.now
-    },
-    fotos:[{
-            type:String,
-            default:Date.now
-        }]
+    }
 
 
 })
