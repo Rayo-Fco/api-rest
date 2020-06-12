@@ -1,7 +1,15 @@
 import { model, Schema, Document } from "mongoose";
 
 export interface ICart extends Document {
-    nombre: string;
+    usuario: string;
+    total: number;
+    productos:[{ 
+        nombre:Schema.Types.ObjectId,
+        cantidad: number,
+        precio: number
+    }];
+    fecha_actualizacion: Date;
+
   };
 
 const CartSchema = new Schema({
@@ -31,8 +39,10 @@ const CartSchema = new Schema({
         type: Boolean,
         required: true,
         default: true,
-
-
+    },
+    fecha_actualizacion:{
+        type:Date,
+        default:Date.now
     }
 
 })

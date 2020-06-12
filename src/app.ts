@@ -5,24 +5,37 @@ import morgan from 'morgan';
 import passport_Middleware from './Middlewares/passport';
 import config from './Config'
 import api from './Routes'
-const app = express();
+import { Database } from './database'
 
-// Puerto 
-app.set('port', config.port);
+class App{
+  public express: express.Application;
 
+  constructor(){
+    this.express = express()
+    this.middleware()
+    this.routes()
+    this.config()
+  }
+  private config():void {
+    this.express.set('port', config.port)
+  }
 
-// Middlewares
-app.use(morgan('dev'));
-app.use(cors());
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
-app.use(passport.initialize());
-passport.use(passport_Middleware);
+  private middleware(): void {
+    this.express.use(morgan('dev'));
+    this.express.use(cors());
+    this.express.use(express.urlencoded({extended: false}));
+    this.express.use(express.json());
+    this.express.use(passport.initialize());
+    passport.use(passport_Middleware);
+  }
+  private routes(): void {
+    this.express.use(api)
+  }
+  private database(): void {
+    let iniciar = new Database()
+    
+  }
 
-app.get('/', (req, res) => {
-    return res.send("Bienvenido a mi Aplicacion TS-2020");
-  })
-  
-app.use(api)
-  
-  export default app;
+}
+
+export default new App().express;

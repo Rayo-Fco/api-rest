@@ -100,18 +100,19 @@ export class ProductController {
     
 }
 
-async function  LimpiarTmp(nombrearchivo:any)
+async function  LimpiarTmp(nombrearchivo:any) 
 {
     let bo:boolean = false
-    for (let a=0; a< nombrearchivo.length; a++)
-    {
-        await fs.unlink(path.join(__dirname,'../tmp/')+nombrearchivo[a].filename, function (err) {
-            if (err) console.log('Error LimpiarTMP: '+err)
-          }); 
-          bo = true;
+    if(nombrearchivo){
+        for (let a=0; a< nombrearchivo.length; a++)
+        {
+            await fs.unlink(path.join(__dirname,'../tmp/')+nombrearchivo[a].filename, function (err) {
+                if (err) console.log('Error LimpiarTMP: '+err)
+            }); 
+            bo = true;
+        }
+        if(bo)console.log('Se ha limpiado los TMP!');
     }
-    if(bo)console.log('Se ha limpiado los TMP!');
-    
 }
 
 export default new ProductController()

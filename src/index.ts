@@ -1,4 +1,7 @@
 import app from './app'
-import './database';
+    console.log('Conectando el Servidor.....')
+app.listen(app.get('port'), () => 
 
-app.listen(app.get('port'), () => console.log('Corriendo aplicacion en el puerto: ' + app.get('port')))
+    console.log('Corriendo la aplicacion en el puerto: ' + app.get('port'))
+
+)
