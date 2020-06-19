@@ -42,6 +42,7 @@ export class UserController {
             telefono: req.body.telefono,
             password: ClaveEncriptada,
         })
+
         await user.save((error)=>{
             if (error){
                 return res.status(500).send( { error: `Error al crear el usuario: ${error}` })
@@ -49,6 +50,7 @@ export class UserController {
                 return res.status(200).send({ token: CreateToken(user) })
         })
     }
+
 }
 
 function CreateToken(user:IUser){
@@ -63,6 +65,8 @@ function CreateToken(user:IUser){
       });
     return token
 }
+
+
 
 async function  EncryptKey(password:String){
     const salt = await Bcrypt.genSalt(10)

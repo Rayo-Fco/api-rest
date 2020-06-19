@@ -7,6 +7,9 @@ export interface IUser extends Document {
     telefono: number,
     email: string;
     password: string;
+    fecha_registro:Date;
+    fecha_resetpassword:Date;
+    fecha_actualizacion:Date;
   };
 
 const UserSchema = new Schema({
@@ -59,9 +62,12 @@ const UserSchema = new Schema({
         type:Date,
         default:Date.now
     },
+    fecha_resetpassword:{
+        type:Date
+    },
     fecha_registro:{
         type:Date,
-        default:Date.now
+        default:Date.now,
     }
 
 })

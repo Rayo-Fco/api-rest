@@ -6,6 +6,9 @@ export default
         USER: process.env.MONGODB_USER,
         PASSWORD: process.env.MONGODB_PASSWORD
       },
-    SECRET_TOKEN: "KeyApiTypeScript"
+    SECRET_TOKEN: "KeyApiTypeScript",
+    nodemailer:{
+      
+    }
 
 }
