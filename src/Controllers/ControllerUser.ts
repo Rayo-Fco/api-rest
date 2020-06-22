@@ -61,7 +61,7 @@ function CreateToken(user:IUser){
     config.SECRET_TOKEN, 
     {
         algorithm: 'HS256', // Base de Codificacion
-        expiresIn: '7 days', // Tiempo de Duracion
+        expiresIn: '2 days', // Tiempo de Duracion
       });
     return token
 }
@@ -69,7 +69,7 @@ function CreateToken(user:IUser){
 
 
 async function  EncryptKey(password:String){
-    const salt = await Bcrypt.genSalt(10)
+    const salt = await Bcrypt.genSalt(config.Password_Salt)
     const EncryptedKey = await Bcrypt.hash(password, salt)
     return EncryptedKey
 }

@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import config from '../Config'
 import Bcrypt from 'bcrypt'
 import Validar from '../Middlewares/joi'
-import { date, valid, boolean } from '@hapi/joi';
 
 export class ResetPasswordController {
     constructor(){}
@@ -41,6 +40,7 @@ export class ResetPasswordController {
             else return res.status(400).json({ error: 'Ya se le ha enviado el link a su correo tiene que esperar 3 min para enviar otro'}) 
         }
     }
+
     public async ResetPassword(req:Request, res:Response){
         if(!req.query.email || !req.query.token) return res.status(400).send({error: 'Link invalido o Ya ha expirado los 3 min'})
         
@@ -105,7 +105,7 @@ function VerifyToken(token:string) {
 }
 
 async function  EncryptKey(password:String){
-    const salt = await Bcrypt.genSalt(10)
+    const salt = await Bcrypt.genSalt(config.Password_Salt)
     const EncryptedKey = await Bcrypt.hash(password, salt)
     return EncryptedKey 
 }

@@ -68,6 +68,7 @@ export class ProductController {
         const {error} = Validar.Stock_Product(req.body)
         console.log(error)
         if (error) return res.status(400).send({error: error.details})
+        
         let cod_producto = parseInt(req.params.id)
         let Validar_Codigo = await Product.findOne({ codigo: cod_producto})
         if (!Validar_Codigo) return res.status(400).json({ error: `El Codigo: ${cod_producto} no se encuentra registrado`});

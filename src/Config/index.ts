@@ -7,8 +7,16 @@ export default
         PASSWORD: process.env.MONGODB_PASSWORD
       },
     SECRET_TOKEN: "KeyApiTypeScript",
-    nodemailer:{
-      
+    Password_Salt: 10,
+    mail:{
+      host: 'mail.franciscojavier.xyz',
+      port: 587,
+      user: 'prueba@franciscojavier.xyz',
+      pass: 'A193756842'
+    },
+    tienda:{
+      nombre:' Lenceria pruebaa',
+      dominio: 'http://www.Tienda.cl'
     }
 
 }

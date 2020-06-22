@@ -2,6 +2,7 @@ import {Router} from 'express'
 import CtrlUser from '../Controllers/ControllerUser'
 import CtrlProduct from '../Controllers/ControllerProduct';
 import CtrlResetPassword from '../Controllers/ControllerResetPassword'
+import CtrlMail from '../Controllers/ControllerMail'
  
 
 const api = Router()
@@ -18,7 +19,7 @@ api.post('/registrar', CtrlUser.RegisterUser)
 api.post('/login', CtrlUser.LoginIn)
 api.post('/login/reset', CtrlResetPassword.SendLink)
 api.post('/login/reset_password', CtrlResetPassword.ResetPassword)
-
+api.get('/send', CtrlMail.send)
  
 api.get('/productos', CtrlProduct.getProducts)
 api.post('/productos/agregar',  CtrlProduct.addProduct)
