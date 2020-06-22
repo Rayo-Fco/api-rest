@@ -11,12 +11,27 @@ export class MailController {
             dominio: config.tienda.dominio,
             tienda: config.tienda.nombre
         }
-        const mail = await Nodemail.SendMail("Francisco.grd@gmail.com","Recuperar Contraseña",datos,"ResetPassword")
-
-        if(!mail) return res.status(400).send({error: 'Error al enviar el mensaje '})
-
-        return res.status(200).send({mensaje: 'enviado'})
+        
     }
+
+    public async ResetPassword(email:string,nombre:string,apellido:string,token:string){
+
+        let datos = {
+            nombre: nombre+' '+apellido,
+            url: config.tienda.dominio+"/login/reset_password?email="+email+'&token='+token,
+            tienda: config.tienda.nombre
+        }
+
+        let correo:string = email
+        let asunto:string = "Recuperar Contraseña"
+        let template:string = "ResetPassword"
+
+        const mail = await Nodemail.SendMail(correo,asunto,datos,template)
+
+        return mail
+
+    }
+    
 
     
 }

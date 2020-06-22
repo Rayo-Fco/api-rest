@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import config from '../Config'
 import Bcrypt from 'bcrypt'
 import Validar from '../Middlewares/joi'
+import CtrlMail from '../Controllers/ControllerMail'
 
 export class ResetPasswordController {
     constructor(){}
@@ -17,31 +18,58 @@ export class ResetPasswordController {
         
         if(!Usuario.fecha_resetpassword)
         {
-            await User.updateOne(Usuario, {
-                fecha_resetpassword: Date.now()
-            },(error)=>{
-              if(error) return res.status(500).send( { error: `Error al enviar el link: ${error}` })
-           })
-           return res.status(200).json({ token_reset: CreateToken(Usuario)}) 
+           
+           let token = CreateToken(Usuario)
+
+           let mail = await CtrlMail.ResetPassword(Usuario.email,Usuario.nombre,Usuario.apellido,token)
+
+           if(mail)
+            {
+                await User.updateOne(Usuario, {
+                    fecha_resetpassword: Date.now()
+                },(error)=>{
+                     if(error) return res.status(500).send( { error: `Error al enviar el link: ${error}` })
+                })
+            
+                return res.status(200).json({ mensaje:'Email Enviado con el restablecimiento de su contraseña'}) 
+           }
+           else
+           {
+            return res.status(400).json({ error:'Error al enviar el email con el restablecimiento de su contraseña'}) 
+           }
+           
            
         }
         else
         {
             let tiempo =((new Date().getTime())-Usuario.fecha_resetpassword.getTime()) / 1000 / 60
+           
             if(tiempo > 3){
-                await User.updateOne(Usuario, {
-                    fecha_resetpassword: Date.now()
-                },(error)=>{
-                  if(error) return res.status(500).send( { error: `Error al enviar el link: ${error}` })
-                })
-                return res.status(200).json({ token_reset: CreateToken(Usuario)})
+                let token = CreateToken(Usuario)
+
+                let mail =  CtrlMail.ResetPassword(Usuario.email,Usuario.nombre,Usuario.apellido,token)
+     
+                if(mail)
+                {
+                    await User.updateOne(Usuario, {
+                        fecha_resetpassword: Date.now()
+                    },(error)=>{
+                        if(error) return res.status(500).send( { error: `Error al enviar el link: ${error}` })
+                    })
+
+                    return res.status(200).json({ mensaje:'Email Enviado con el restablecimiento de su contraseña'}) 
+                }
+                else
+                {
+                 return res.status(400).json({ error:'Error al enviar el email con el restablecimiento de su contraseña'}) 
+                }
                 
             }
             else return res.status(400).json({ error: 'Ya se le ha enviado el link a su correo tiene que esperar 3 min para enviar otro'}) 
         }
     }
 
-    public async ResetPassword(req:Request, res:Response){
+    public async ResetPasswordPost(req:Request, res:Response){
         if(!req.query.email || !req.query.token) return res.status(400).send({error: 'Link invalido o Ya ha expirado los 3 min'})
         
         const {error} = Validar.ResetPassword(req.query)
@@ -72,6 +100,28 @@ export class ResetPasswordController {
                     })
                     return res.status(200).json({ mensaje: 'Se ha cambiado su clave! '}) 
                 }
+                return res.status(200).end()
+            }
+            return res.status(400).json({ error: 'Link invalido o Ya ha expirado los 3 min'});
+        }
+        else
+        {
+            return res.status(400).json({ error: 'Link invalido o Ya ha expirado los 3 min'});
+        }
+    }
+
+    public async ResetPasswordGet(req:Request, res:Response){
+        if(!req.query.email || !req.query.token) return res.status(400).send({error: 'Link invalido o Ya ha expirado los 3 min'})
+        
+        const {error} = Validar.ResetPassword(req.query)
+        if(error) return res.status(400).send({error: error.details})
+
+        const valido =  VerifyToken(req.query.token)
+        if(valido)
+        {
+            let decode:any = jwt.decode(req.query.token)
+            if(decode.email === req.query.email)
+            {
                 return res.status(200).end()
             }
             return res.status(400).json({ error: 'Link invalido o Ya ha expirado los 3 min'});

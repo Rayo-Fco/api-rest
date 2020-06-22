@@ -18,7 +18,10 @@ api.get('/',(req, res, next)=>{
 api.post('/registrar', CtrlUser.RegisterUser)
 api.post('/login', CtrlUser.LoginIn)
 api.post('/login/reset', CtrlResetPassword.SendLink)
-api.post('/login/reset_password', CtrlResetPassword.ResetPassword)
+
+api.post('/login/reset_password', CtrlResetPassword.ResetPasswordPost)
+api.get('/login/reset_password', CtrlResetPassword.ResetPasswordGet)
+
 api.get('/send', CtrlMail.send)
  
 api.get('/productos', CtrlProduct.getProducts)

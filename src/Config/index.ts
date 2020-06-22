@@ -16,7 +16,7 @@ export default
     },
     tienda:{
       nombre:' Lenceria pruebaa',
-      dominio: 'http://www.Tienda.cl'
+      dominio: 'http://localhost:3000'
     }
 
 }
