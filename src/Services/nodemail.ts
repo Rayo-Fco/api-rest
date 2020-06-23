@@ -50,7 +50,8 @@ class Mail {
 
     }
     if(plantilla != "error"){
-        let info = await transporter.sendMail(optionmail,(error, info) => {
+
+        await transporter.sendMail(optionmail,(error) => {
             if (error) 
             {
                 console.log('Error al enviar el mensaje');
@@ -58,9 +59,10 @@ class Mail {
             }
     
             console.log('Mensaje Enviado!');
-            transporter.close();
-        });
+        })
+
         return true
+        
     }
     else
     {

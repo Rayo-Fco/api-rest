@@ -19,8 +19,8 @@ api.post('/registrar', CtrlUser.RegisterUser)
 api.post('/login', CtrlUser.LoginIn)
 api.post('/login/reset', CtrlResetPassword.SendLink)
 
-api.post('/login/reset_password', CtrlResetPassword.ResetPasswordPost)
-api.get('/login/reset_password', CtrlResetPassword.ResetPasswordGet)
+api.post('/login/reset_password', CtrlResetPassword.UpdatePassword)  // validar password y cambio de la misma
+api.get('/login/reset_password', CtrlResetPassword.ResetPassword) // ingresar a la url
 
 api.get('/send', CtrlMail.send)
  

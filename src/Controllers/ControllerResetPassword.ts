@@ -26,12 +26,12 @@ export class ResetPasswordController {
            if(mail)
             {
                 await User.updateOne(Usuario, {
-                    fecha_resetpassword: Date.now()
+                 fecha_resetpassword: Date.now()
                 },(error)=>{
                      if(error) return res.status(500).send( { error: `Error al enviar el link: ${error}` })
                 })
             
-                return res.status(200).json({ mensaje:'Email Enviado con el restablecimiento de su contraseña'}) 
+                return res.status(200).json({ mensaje:'En los proximos minutos te llegara un email con el restablecimiento de su contraseña'}) 
            }
            else
            {
@@ -47,8 +47,8 @@ export class ResetPasswordController {
             if(tiempo > 3){
                 let token = CreateToken(Usuario)
 
-                let mail =  CtrlMail.ResetPassword(Usuario.email,Usuario.nombre,Usuario.apellido,token)
-     
+                let mail =  await CtrlMail.ResetPassword(Usuario.email,Usuario.nombre,Usuario.apellido,token)
+
                 if(mail)
                 {
                     await User.updateOne(Usuario, {
@@ -57,7 +57,7 @@ export class ResetPasswordController {
                         if(error) return res.status(500).send( { error: `Error al enviar el link: ${error}` })
                     })
 
-                    return res.status(200).json({ mensaje:'Email Enviado con el restablecimiento de su contraseña'}) 
+                    return res.status(200).json({ mensaje:'En los proximos minutos te llegara un email con el restablecimiento de su contraseña'}) 
                 }
                 else
                 {
@@ -69,7 +69,7 @@ export class ResetPasswordController {
         }
     }
 
-    public async ResetPasswordPost(req:Request, res:Response){
+    public async UpdatePassword(req:Request, res:Response){
         if(!req.query.email || !req.query.token) return res.status(400).send({error: 'Link invalido o Ya ha expirado los 3 min'})
         
         const {error} = Validar.ResetPassword(req.query)
@@ -81,8 +81,6 @@ export class ResetPasswordController {
             let decode:any = jwt.decode(req.query.token)
             if(decode.email === req.query.email)
             {
-                if(req.body.password)
-                {
                     const {error} = Validar.Password(req.body)
                     if(error) return res.status(400).send({error : error.details});
 
@@ -98,9 +96,11 @@ export class ResetPasswordController {
                     {
                         if(error) return res.status(500).send( { error: `Error al cambiar la clave: ${error}` })
                     })
+
+                    let mail =  CtrlMail.UpdatePassword(Usuario.email,Usuario.nombre,Usuario.apellido)
+                    if(!mail) console.log('Error al enviar el correo de confirmacion de clave')
+
                     return res.status(200).json({ mensaje: 'Se ha cambiado su clave! '}) 
-                }
-                return res.status(200).end()
             }
             return res.status(400).json({ error: 'Link invalido o Ya ha expirado los 3 min'});
         }
@@ -110,7 +110,7 @@ export class ResetPasswordController {
         }
     }
 
-    public async ResetPasswordGet(req:Request, res:Response){
+    public async ResetPassword(req:Request, res:Response){
         if(!req.query.email || !req.query.token) return res.status(400).send({error: 'Link invalido o Ya ha expirado los 3 min'})
         
         const {error} = Validar.ResetPassword(req.query)

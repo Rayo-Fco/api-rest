@@ -19,9 +19,11 @@ export class ProductController {
         CargaFotoProducto(req, res, async function (err)
         {
                 // Validar Parametros //  
-                if(err != undefined && err.code == 'LIMIT_UNEXPECTED_FILE') return res.status(400).send({ error: `Solo se pueden subir ${cantidadfoto} Fotos` })
-                const {error} = Validar.Add_Product(req.body)
+                if(err != undefined && err.message == 'formato') return res.status(400).send({ error: `Solo se pueden subir Fotos con formato JPG, PNG y JPEG` })
 
+                if(err != undefined && err.code == 'LIMIT_UNEXPECTED_FILE') return res.status(400).send({ error: `Solo se pueden subir ${cantidadfoto} Fotos` })
+                
+                const {error} = Validar.Add_Product(req.body)
                 if(error)
                 {
                     if(!err) LimpiarTmp(req.files)
@@ -37,12 +39,16 @@ export class ProductController {
                 if (err != undefined && err.code == 'LIMIT_FILE_SIZE') return res.status(400).send({ error: 'El Archivo no puede superar los 5 MB'})
                 fs.promises.mkdir(path.join(__dirname,'../Public/Products/')+req.body.codigo, { recursive: true })
                 const foto = []
-                for(let p of req.files)
+                console.log("paos");
+                if(req.files)
                 {
-                    fs.createReadStream(path.join(__dirname,'../tmp/')+p.filename)
-                    .pipe(fs.createWriteStream(path.join(__dirname,'../Public/Products/')+req.body.codigo+'/'+p.filename)) 
-                    fs.unlink(path.join(__dirname,'../tmp/')+p.filename, function (err) {}); 
-                    foto.push(path.join(__dirname,'../Public/Products/'+req.body.codigo+'/')+p.filename)
+                    for(let p of req.files)
+                    {
+                        fs.createReadStream(path.join(__dirname,'../tmp/')+p.filename)
+                        .pipe(fs.createWriteStream(path.join(__dirname,'../Public/Products/')+req.body.codigo+'/'+p.filename)) 
+                        fs.unlink(path.join(__dirname,'../tmp/')+p.filename, function (err) {}); 
+                        foto.push(path.join(__dirname,'../Public/Products/'+req.body.codigo+'/')+p.filename)
+                    }
                 }
                 //Guardar el Producto//
                 const producto = new Product({

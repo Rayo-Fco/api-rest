@@ -10,7 +10,15 @@ const storage = multer.diskStorage({
     }
 });
 
-const multerStorage = multer({storage,limits: {fileSize: 1000000}})
+let pesoMB:number = 5 // peso de las imagenes
+
+const multerStorage = multer({storage,limits: {fileSize: pesoMB*1000*1000 },fileFilter: function(req, file, cb){
+          if((file.mimetype == "image/jpeg" || file.mimetype == "image/jpg" || file.mimetype == "image/png")){
+                return cb(null, true);
+           } else{ 
+                return cb(new Error("formato"));
+           }
+} })
 
 export default multerStorage;
 
