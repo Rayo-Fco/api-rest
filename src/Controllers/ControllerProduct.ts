@@ -10,6 +10,69 @@ import mongoose from 'mongoose'
 export class ProductController {
     constructor() {}
     
+    public async getProductsCtg(req:Request, res:Response){
+        console.log(req.params);
+        console.log(req.query.sort);
+        const {error} = Validar.Category(req.params)
+        if (error) return res.status(400).send({error: error.details})
+        let categoria = req.params.categoria
+        let orden = req.query.sort
+
+        switch (orden) {
+            case 'nombre_asc':
+                orden = { nombre: 1 }
+            break;
+            case 'nombre_dec':
+                orden = { nombre: -1 }
+            break;
+            case 'new':
+                orden = { fecha_registro: 1}
+            break;
+            case 'old':
+                orden = { fecha_registro: -1 }
+            break;
+            default:
+                orden = { fecha_actualizacion: -1 }
+            break;
+        }
+        console.log(orden);
+ 
+        ///await Product.find({},{_id:0}).populate({ path: 'categoria', match: { nombre: 'Prueba'}}).exec()
+         let products = await Product.aggregate([
+             {
+               $lookup:
+                 {
+                   from: "categories",
+                   localField: "categoria",
+                   foreignField: "_id",
+                   as: "categoria"
+                 }
+            },{
+                $project:
+                {
+                    _id:0,
+                  //  categoria:0,
+                    categoria:{_id:0, fecha_registro:0}
+                }
+            },{
+                $match:
+                {
+                     'categoria.nombre': categoria
+                }
+            },
+            {
+                $sort: orden
+                
+            }    
+         ]);
+         if(products.length == 0) return res.status(400).send({error: 'error'})
+
+         return res.status(200).send(products)
+ 
+ 
+ 
+     }
+
     public async getProducts(req:Request, res:Response){
        // let products = await Product.find()
        let category = req.query.category

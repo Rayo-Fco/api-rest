@@ -27,6 +27,11 @@ api.get('/send', CtrlMail.send)
 api.get('/productos', CtrlProduct.getProducts)
 api.get('/productos/:id',CtrlProduct.getProductsCod)
 api.post('/productos/agregar',  CtrlProduct.addProduct)
+
+api.get('/:categoria', CtrlProduct.getProductsCtg)
+
+
+api.get('/productos/:id',CtrlProduct.getProductsCod)
 api.put('/productos/:id',  CtrlProduct.updateStock)
 api.delete('/productos/:id',  CtrlProduct.deleteProduct)
 

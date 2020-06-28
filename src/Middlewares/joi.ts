@@ -252,18 +252,17 @@ class Validacion {
   }
 
   public Category(data:any){
+    console.log("prueb_ "+data);
     let Schema = Joi.object().keys({
-      'categoria': Joi.string()
-        .min(3)
-        .max(50)
-        .required()
+      categoria : Joi.string()
+        .empty()
         .trim()
+        .required()
         .messages({
-          'string.empty': 'La categoria no puede ser un campo vacio',
-          'string.min':  'La categoria tiene que tener {#limit} caracteres como minimo ',
-          'string.max': 'La categoria tiene que tener {#limit} caracteres como maximo ',
-          'any.required': 'La categoria es requerido'
-        })
+          'string.base': 'La categoria es invalida',
+          'string.empty': 'La categoria es invalida',
+          'any.required': 'La categoria es invalida'
+        }),
     })
     return Schema.validate(data, { abortEarly: false })
   }
