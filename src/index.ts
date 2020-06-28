@@ -1,7 +1,9 @@
-import app from './app'
-    console.log('Conectando el Servidor.....')
-app.listen(app.get('port'), () => 
+import App from './app'
 
-    console.log('Corriendo la aplicacion en el puerto: ' + app.get('port'))
+console.log('Conectando el Servidor.....')
+
+App.listen(App.get('port'), () => 
+
+    console.log('Corriendo la aplicacion en el puerto: ' + App.get('port'))
 
 )

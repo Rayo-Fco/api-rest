@@ -1,15 +1,55 @@
 import { Request, Response } from 'express';
 import Product from '../Models/Products';
+import Category from '../Models/Category'
 import Validar from '../Middlewares/joi'
 import upload from '../Middlewares/multer'
 import fs from 'fs'
 import path from 'path'
+import mongoose from 'mongoose'
 
 export class ProductController {
     constructor() {}
     
     public async getProducts(req:Request, res:Response){
-        let products = await Product.find()
+       // let products = await Product.find()
+       let category = req.query.category
+
+       ///await Product.find({},{_id:0}).populate({ path: 'categoria', match: { nombre: 'Prueba'}}).exec()
+        let products = await Product.aggregate([
+            {
+              $lookup:
+                {
+                  from: "categories",
+                  localField: "categoria",
+                  foreignField: "_id",
+                  as: "categoria"
+                }
+           },{
+               $project:
+               {
+                   _id:0,
+                   categoria:{_id:0, fecha_registro:0}
+               }
+           },{
+               $match:
+               {
+                    'categoria.nombre': ''
+               }
+           }    
+        ]);
+        return res.status(200).send(products)
+
+
+
+    }
+
+    public async getProductsCod(req:Request, res:Response){
+        let validar_numero = req.params.id.match(/^[0-9]+$/)
+        if(!validar_numero) return res.status(400).send({error: `El Producto:${req.params.id} es invalido`})
+
+        let cod = parseInt(req.params.id)
+        let products = await Product.findOne({codigo:cod},{_id:0}).populate('categoria',{_id:0, fecha_registro:0})
+        if(!products) return res.status(400).send({ error: 'Producto invalido'})
         return res.status(200).send(products)
     }
 
@@ -29,6 +69,17 @@ export class ProductController {
                     if(!err) LimpiarTmp(req.files)
                     return res.status(400).send({error: error.details})
                 }
+                if(!mongoose.Types.ObjectId.isValid(req.body.categoria)) {
+                    LimpiarTmp(req.files)
+                    return res.status(400).json({ error: `La categoria no existe en el sistema`});  
+                  }
+
+                let Validar_Categoria = await Category.findById(req.body.categoria)
+                if(!Validar_Categoria){
+                    LimpiarTmp(req.files)
+                    return res.status(400).json({ error: `La categoria no existe en el`});  
+                } 
+
                 let Validar_Productos = await Product.findOne({ codigo: req.body.codigo})
                 if (Validar_Productos)
                 {
@@ -55,6 +106,7 @@ export class ProductController {
                     nombre: req.body.nombre,
                     stock: req.body.stock,
                     codigo: req.body.codigo,
+                    categoria: req.body.categoria,
                     fotos:foto
                 })
                 await producto.save((error)=>{

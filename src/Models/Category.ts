@@ -8,7 +8,7 @@ const CategorySchema = new Schema({
     nombre:{
         type: String,
         unique: true,
-        lowercase:true,
+        lowercase:true
         
     },
     fecha_registro:{
@@ -17,5 +17,9 @@ const CategorySchema = new Schema({
     }
 
 })
+
+function a() {
+    
+}
 
 export default model<ICategory>("Category", CategorySchema);

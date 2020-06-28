@@ -7,9 +7,9 @@ export interface IUser extends Document {
     telefono: number,
     email: string;
     password: string;
-    fecha_registro:Date;
-    fecha_resetpassword:Date;
-    fecha_actualizacion:Date;
+    fecha_registro: Date;
+    fecha_resetpassword: Date;
+    fecha_actualizacion: Date;
   };
 
 const UserSchema = new Schema({

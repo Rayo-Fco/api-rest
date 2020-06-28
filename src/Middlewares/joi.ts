@@ -219,6 +219,15 @@ class Validacion {
           'string.empty': 'El codigo no puede ser un campo vacio',
           'any.required': 'El codigo es requerido'
         }),
+        'categoria' : Joi.string()
+        .empty()
+        .trim()
+        .required()
+        .messages({
+          'string.base': 'La categoria es invalida',
+          'string.empty': 'La categoria es invalida',
+          'any.required': 'La categoria es invalida'
+        }),
 
 
     })
@@ -238,6 +247,23 @@ class Validacion {
           'string.empty': 'El stock no puede ser un campo vacio',
           'any.required': 'El stock es requerido'
         }),
+    })
+    return Schema.validate(data, { abortEarly: false })
+  }
+
+  public Category(data:any){
+    let Schema = Joi.object().keys({
+      'categoria': Joi.string()
+        .min(3)
+        .max(50)
+        .required()
+        .trim()
+        .messages({
+          'string.empty': 'La categoria no puede ser un campo vacio',
+          'string.min':  'La categoria tiene que tener {#limit} caracteres como minimo ',
+          'string.max': 'La categoria tiene que tener {#limit} caracteres como maximo ',
+          'any.required': 'La categoria es requerido'
+        })
     })
     return Schema.validate(data, { abortEarly: false })
   }
