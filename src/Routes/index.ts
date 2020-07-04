@@ -4,6 +4,7 @@ import CtrlProduct from '../Controllers/ControllerProduct';
 import CtrlResetPassword from '../Controllers/ControllerResetPassword'
 import CtrlMail from '../Controllers/ControllerMail'
 import CtrlCategory from '../Controllers/ControllerCategory'
+import CtrlCart from '../Controllers/ControllerCart'
 
 const api = Router()
 
@@ -28,7 +29,7 @@ api.get('/productos', CtrlProduct.getProducts)
 api.get('/productos/:id',CtrlProduct.getProductsCod)
 api.post('/productos/agregar',  CtrlProduct.addProduct)
 
-api.get('/:categoria', CtrlProduct.getProductsCtg)
+api.get('/categoria/:categoria', CtrlProduct.getProductsCtg)
 
 
 api.get('/productos/:id',CtrlProduct.getProductsCod)
@@ -37,6 +38,9 @@ api.delete('/productos/:id',  CtrlProduct.deleteProduct)
 
 api.get('/categorias', CtrlCategory.getCategory)
 api.post('/categorias', CtrlCategory.addCategory)
+
+
+api.get('/carro', CtrlCart.getCart)
 
 
 export default api;

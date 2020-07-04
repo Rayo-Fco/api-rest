@@ -3,6 +3,7 @@ import { model, Schema, Document } from "mongoose";
 export interface ICategory extends Document {
     nombre: string;
   };
+  
 
 const CategorySchema = new Schema({
     nombre:{
@@ -18,8 +19,6 @@ const CategorySchema = new Schema({
 
 })
 
-function a() {
-    
-}
+
 
 export default model<ICategory>("Category", CategorySchema);

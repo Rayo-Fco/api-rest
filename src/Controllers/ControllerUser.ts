@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import User, { IUser }from '../Models/User';
+import Cart, { ICart }from '../Models/Cart';
 import jwt from 'jsonwebtoken';
 import config from '../Config'
 import Bcrypt from 'bcrypt'
@@ -43,11 +44,16 @@ export class UserController {
             password: ClaveEncriptada,
         })
 
-        await user.save((error)=>{
+        await user.save(async (error,data)=>{
             if (error){
                 return res.status(500).send( { error: `Error al crear el usuario: ${error}` })
             }
-                return res.status(200).send({ token: CreateToken(user) })
+                const cart = new Cart({
+                    usuario: data._id
+                })
+                await cart.save()
+                return res.status(200).send({mensaje: 'Usuario Registrado con Exito' })
+
         })
     }
 

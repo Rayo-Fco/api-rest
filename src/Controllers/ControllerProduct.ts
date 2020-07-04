@@ -11,10 +11,10 @@ export class ProductController {
     constructor() {}
     
     public async getProductsCtg(req:Request, res:Response){
-        console.log(req.params);
-        console.log(req.query.sort);
+
         const {error} = Validar.Category(req.params)
         if (error) return res.status(400).send({error: error.details})
+        
         let categoria = req.params.categoria
         let orden = req.query.sort
 
@@ -35,9 +35,7 @@ export class ProductController {
                 orden = { fecha_actualizacion: -1 }
             break;
         }
-        console.log(orden);
- 
-        ///await Product.find({},{_id:0}).populate({ path: 'categoria', match: { nombre: 'Prueba'}}).exec()
+
          let products = await Product.aggregate([
              {
                $lookup:
@@ -51,7 +49,6 @@ export class ProductController {
                 $project:
                 {
                     _id:0,
-                  //  categoria:0,
                     categoria:{_id:0, fecha_registro:0}
                 }
             },{

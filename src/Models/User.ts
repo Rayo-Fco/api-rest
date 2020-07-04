@@ -1,15 +1,16 @@
 import { model, Schema, Document } from "mongoose";
 
 export interface IUser extends Document {
-    nombre: string;
-    apellido: string;
-    rut:string;
-    telefono: number,
-    email: string;
-    password: string;
-    fecha_registro: Date;
-    fecha_resetpassword: Date;
-    fecha_actualizacion: Date;
+    nombre: string
+    apellido: string
+    rut:string
+    telefono: number
+    email: string
+    password: string
+    cart: Schema.Types.ObjectId
+    fecha_registro: Date
+    fecha_resetpassword: Date
+    fecha_actualizacion: Date
   };
 
 const UserSchema = new Schema({
@@ -47,6 +48,10 @@ const UserSchema = new Schema({
         lowercase:true,
         minlength:6,
         maxlength:120
+    },
+    carro:{
+        type: Schema.Types.ObjectId,
+        ref: 'Cart'
     },
     password:{
         type:String,
