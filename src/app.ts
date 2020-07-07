@@ -2,7 +2,7 @@ import express from 'express'
 import passport from 'passport'
 import cors from 'cors';
 import morgan from 'morgan';
-import passport_Middleware from './Middlewares/passport';
+import  {admin, user}  from './Middlewares/passport';
 import config from './Config'
 import api from './Routes'
 import { Database } from './database'
@@ -27,8 +27,13 @@ class App{
     this.express.use(express.urlencoded({extended: false}));
     this.express.use(express.json());
     this.express.use(passport.initialize());
-    passport.use(passport_Middleware);
+
+    passport.use('admin',admin)
+    passport.use('user',user)
+
+    
   }
+
   private routes(): void {
     this.express.use(api)
   }
