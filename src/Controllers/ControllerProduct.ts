@@ -70,7 +70,7 @@ export class ProductController {
  
      }
 
-    public async getProducts(req:Request, res:Response){
+    public async getProductsAll(req:Request, res:Response){
        // let products = await Product.find()
        let category = req.query.category
 
@@ -85,15 +85,10 @@ export class ProductController {
                   as: "categoria"
                 }
            },{
-               $project:
+               $project: 
                {
                    _id:0,
                    categoria:{_id:0, fecha_registro:0}
-               }
-           },{
-               $match:
-               {
-                    'categoria.nombre': ''
                }
            }    
         ]);
@@ -131,13 +126,13 @@ export class ProductController {
                 }
                 if(!mongoose.Types.ObjectId.isValid(req.body.categoria)) {
                     LimpiarTmp(req.files)
-                    return res.status(400).json({ error: `La categoria no existe en el sistema`});  
+                    return res.status(400).json({ error: `La categoria no existe en el sistema o tiene que crearla`});  
                   }
 
                 let Validar_Categoria = await Category.findById(req.body.categoria)
                 if(!Validar_Categoria){
                     LimpiarTmp(req.files)
-                    return res.status(400).json({ error: `La categoria no existe en el`});  
+                    return res.status(400).json({ error: `La categoria no existe en el sistema o tiene que crearla`});  
                 } 
 
                 let Validar_Productos = await Product.findOne({ codigo: req.body.codigo})

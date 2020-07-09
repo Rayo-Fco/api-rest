@@ -15,8 +15,9 @@ class App{
     this.middleware()
     this.routes()
     this.config()
-    
   }
+
+  
   private config():void {
     this.express.set('port', config.port)
   }

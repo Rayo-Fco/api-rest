@@ -4,6 +4,7 @@ export interface IProduct extends Document {
     nombre: string;
     codigo: number;
     stock: number;
+    precio:number;
     fotos: [];
   };
 
@@ -23,6 +24,10 @@ const ProductSchema = new Schema({
         maxlength: 40
     },
     stock:{
+        type:Number,
+        required: true,
+    },
+    precio:{
         type:Number,
         required: true,
     },

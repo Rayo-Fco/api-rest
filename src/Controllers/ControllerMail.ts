@@ -5,14 +5,7 @@ import config from '../Config'
 export class MailController {
     constructor() {}
 
-    public async send(req:Request, res:Response,){
-        let datos = {
-            nombre:"Pedro Gonzales",
-            dominio: config.tienda.dominio,
-            tienda: config.tienda.nombre
-        }
-        
-    }
+    
 
     public async ResetPassword(email:string,nombre:string,apellido:string,token:string):Promise<boolean>{
 

@@ -183,6 +183,63 @@ class Validacion {
     })
     return Schema.validate(data, { abortEarly: false })
   }
+  public Admin(data:any){
+    let Schema = Joi.object().keys({
+      'nombre': Joi.string()
+      .min(4)
+      .max(40)
+      .pattern(/^[a-zA-Z]+$/)
+      .required()
+      .messages({
+          'string.base': 'El nombre tiene que ser solo texto',
+          'string.empty': 'El nombre no puede ser un campo vacio',
+          'string.min':  'El nombre tiene que tener {#limit} caracteres como minimo ',
+          'string.max': 'El nombre tiene que tener {#limit} caracteres como maximo ',
+          'string.pattern.base' : 'El nombre tiene que tener solo texto',
+          'any.required': 'El nombre es requerido'
+        }),
+
+      'apellido': Joi.string()
+      .min(4)
+      .max(40)
+      .pattern(/^[a-zA-Z]+$/)
+      .required()
+      .messages({
+          'string.base': 'El apellido tiene que ser solo texto',
+          'string.empty': 'El apellido no puede ser un campo vacio',
+          'string.min':  'El apellido tiene que tener {#limit} caracteres como minimo ',
+          'string.max': 'El apellido tiene que tener {#limit} caracteres como maximo ',
+          'string.pattern.base' : 'El apellido tiene que tener solo texto',
+          'any.required': 'El apellido es requerido'
+        }),
+      'email' : Joi.string()
+      .min(4)
+      .max(120)
+      .email()
+      .required()
+      .messages({
+        'string.empty': 'El email no puede ser un campo vacio',
+        'string.min':  'El email tiene que ser valido',
+        'string.max': 'El email tiene que tener {#limit} caracteres como maximo ',
+        'string.email' : 'El email tiene que ser valido',
+        'any.required': 'El email es requerido'
+      }),
+      'password': Joi.string()
+        .min(6)
+        .max(255)
+        .required()
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/)
+        .messages({
+          'string.base': 'La password tiene que ser solo texto',
+          'string.empty': 'La password no puede ser un campo vacio',
+          'string.min':  'La password tiene que tener {#limit} caracteres como minimo ',
+          'string.max': 'La password tiene que tener {#limit} caracteres como maximo ',
+          'string.pattern.base' : 'La password tiene que tener al menos una letra mayuscula, una letra minuscula y un numero',
+          'any.required': 'La password es requerido'
+        })
+    })
+    return Schema.validate(data, { abortEarly: false })
+  }
 
   public Add_Product(data:any){
     let Schema = Joi.object().keys({
@@ -252,9 +309,8 @@ class Validacion {
   }
 
   public Category(data:any){
-    console.log("prueb_ "+data);
     let Schema = Joi.object().keys({
-      categoria : Joi.string()
+      'categoria' : Joi.string()
         .empty()
         .trim()
         .required()
@@ -264,6 +320,25 @@ class Validacion {
           'any.required': 'La categoria es invalida'
         }),
     })
+    return Schema.validate(data, { abortEarly: false })
+  }
+
+  public Cart(data:any){
+    let Schema = Joi.object().keys({
+        'cantidad' : Joi.string()
+        .empty()
+        .pattern(/^[1-9][0-9]*$/)
+        .trim()
+        .required()
+        .messages({
+          'string.base': 'La cantidad es invalida',
+          'string.patttern.base': 'La cantidad tiene que ser mayor a cero',
+          'string.empty': 'La cantidad es invalida',
+          'any.required': 'La cantidad es invalida'
+        }),
+    })
+
+
     return Schema.validate(data, { abortEarly: false })
   }
 
