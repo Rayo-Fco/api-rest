@@ -60,9 +60,6 @@ const UserSchema = new Schema({
         minlength:6,
         maxlength:255
     },
-    imagen_perfil:{
-        type:String
-    },
     fecha_actualizacion:{
         type:Date,
         default:Date.now

@@ -162,6 +162,7 @@ export class ProductController {
                     stock: req.body.stock,
                     codigo: req.body.codigo,
                     categoria: req.body.categoria,
+                    precio: req.body.precio,
                     fotos:foto
                 })
                 await producto.save((error)=>{
@@ -179,7 +180,6 @@ export class ProductController {
         if(!validar_numero) return res.status(400).send({error: `El Producto:${req.params.id} es invalido`})
 
         const {error} = Validar.Stock_Product(req.body)
-        console.log(error)
         if (error) return res.status(400).send({error: error.details})
         
         let cod_producto = parseInt(req.params.id)

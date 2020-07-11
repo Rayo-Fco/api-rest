@@ -265,6 +265,17 @@ class Validacion {
           'string.empty': 'El stock no puede ser un campo vacio',
           'any.required': 'El stock es requerido'
         }),
+        'precio' : Joi.string()
+        .empty()
+        .trim()
+        .required()
+        .pattern(/^[1-9][0-9]*$/)
+        .messages({
+          'string.base': 'El precio tiene que ser solo numeros',
+          'string.pattern.base' : 'El precio tiene que ser mayor a cero pesos',
+          'string.empty': 'El precio no puede ser un campo vacio',
+          'any.required': 'El precio es requerido'
+        }),
         'codigo' : Joi.string()
         .empty()
         .trim()
@@ -323,7 +334,7 @@ class Validacion {
     return Schema.validate(data, { abortEarly: false })
   }
 
-  public Cart(data:any){
+  public Cart_Cantidad(data:any){
     let Schema = Joi.object().keys({
         'cantidad' : Joi.string()
         .empty()
